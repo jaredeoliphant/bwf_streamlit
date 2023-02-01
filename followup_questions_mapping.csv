@@ -1,0 +1,38 @@
+0,1
+Id,id
+SWE fullname,SWE_name
+Email BWE,SWE_email
+Country,country
+Community,community
+Survey Id,initial_survey_id
+Date,date
+Head Household Name,hh_name
+Person Being Interviewed,interviewee
+Do you treat your water in any way to make it safer to drink?,treat_water
+"If you do not treat your water, what is/are the main reason(s) you do not treat your water for drinking?",not_treat_water_reason
+"If you treat your drinking water, what do you usually do to make it safer to drink?",treat_water_method
+How often do you treat your water to make it safe?,treat_water_freq
+When was the last time you treated your household drinking water with chlorine?,treat_water_last_chlorine
+Where did you get the chlorine to treat your household water?,chlorine_source
+How much do you spend per week for chlorine to treat your water?,chlorine_cost_weekly
+How difficult is it for you to obtain chlorine to treat your water?,chlorine_difficulty
+How do members of your household take water from the home storage container?,hh_retrieve_water_method
+"In the past 24 hours, when did you wash your hands?",wash_hands_24hr_when
+What do you use to wash your hands?,wash_hands_method
+What are the three most common illnesses affecting all children in this household?,three_children_illnesses
+"In the last two weeks (14 days), how many school-age children in your household experienced vomiting and/or diarrhea? (number of children)",two_weeks_school_children_diarrhea
+"In the last two weeks, how many total school days have school-age children in this household missed due to illness? (No. of days)",two_weeks_children_school_days
+"In the last week (7 days), how many children under 5 years old in your household had vomiting and/or diarrhea?",one_week_children_diarrhea
+Did the child(ren) who had vomiting and/or diarrhea go to hospital?,children_hospital
+Medications given to the child(ren) who had vomiting and/or diarrhea,children_medications
+Is the young child(ren) [< 5 years] who was ill breastfeeding?,ill_child_breastfeed
+What was the outcome of your child(ren)’s most recent vomiting/diarrhea at the hospital?,child_hospital_outcome
+"In the last two weeks, how many days have you personally been unable to do work due to your own stomach pain/diarrhea illness?",two_weeks_days_work_missed
+"In the last two weeks, how many total days have other members of your family been unable to do work due to stomach pain/diarrhea illness?",two_weeks_days_hh_work_missed
+How much money was spent by members of this household for medical treatment for these illnesses in the last four (4) weeks? (in local currency),medical_cost_four_weeks_local
+"Since this time last year, how has your own health changed?",yearly_health_change
+"Since this time last year, how has the overall health of your family changed?",yearly_hh_health_change
+What level of benefit has taking part in the safe water education program been to you and your household,level_of_benefit
+Completed,completed
+Latitude,latitude
+Longitude,longitude

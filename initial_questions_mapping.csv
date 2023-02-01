@@ -1,0 +1,66 @@
+0,1
+Id,id
+SWE fullname,SWE_name
+Email SWE,SWE_email
+Country,country
+Community,community
+Date,date
+Head Household Name,hh_name
+Head Household Phone Number,hh_phone
+Head Household Sex,hh_sex
+Head Household Marital Status,hh_marital
+Head Household Age,hh_age
+Head Household Occupation,hh_occupation
+Head Household Education,hh_education
+Person Being Interviewed,interviewee
+Number of Household Male Members 0-1 Year,males_0_1_yr
+Number of Household Female Members 0-1 Year,females_0_1_yr
+Number of Household Male Members 1-5 Years,males_1_5_yr
+Number of Household Female Members 1-5 Years,females_1_5_yr
+Number of Household Male Members 5-12 Years,males_5_12_yr
+Number of Household Female Members 5-12 Years,females_5_12_yr
+Number of Household Male Members 13-17 Years,males_12_17_yr
+Number of Household Female Members 13-17 Years,females_12_17_yr
+Number of Household Male Members 18+ Years,males_18_yr
+Number of Household Female Members 18+ Years,females_18_yr
+Total number of People in Household,hh_size
+Number of children ever born into your household who have died after being born alive.,child_fatalities
+What was/were the cause(s) of the child(ren) death(s)?,child_fatalities_cause
+"If any children 5-17 years are not in school, why not?",no_school_reason
+What is the main source of drinking water for members of your household?,drinking_water_source
+What is the main source of water used by your household for other purposes—cooking/bathing/handwashing?,nondrinking_water_source
+"How long does it take to go to the water source, get water, and return (in No. of Minutes)?",minutes_fetch_water
+How often does someone in your household go to the water source to collect water?,freq_fetch_water
+Who usually goes to the source to fetch water for your household?,who_fetch_water
+What kind of container do you use to carry water from the water source to your household?,fetch_water_container
+Do you treat your water in any way to make it safer to drink?,treat_water
+"If you do not treat your water, what is/are the main reason(s) you do not treat your water for drinking?",not_treat_water_reason
+"If you treat your drinking water, what do you usually do to make it safer to drink?",treat_water_method
+How often do you treat your water to make it safe?,treat_water_freq
+When was the last time you treated your household drinking water with chlorine?,treat_water_last_chlorine
+Where did you get the chlorine to treat your household water?,chlorine_source
+How much do you spend per week for chlorine to treat your water?,chlorine_cost_weekly
+How difficult is it for you to obtain chlorine to treat your water?,chlorine_difficulty
+How do members of your household take water from the home storage container?,hh_retrieve_water_method
+Where does this household dispose of rubbish or trash?,hh_trash
+Where do those in your household usually go to defecate?,hh_defecate
+"The last time the youngest child in the household passed a stool, what was done to dispose of the waste?",youngest_stool_dispose
+"In the past 24 hours, have you personally washed your hands?",wash_hands_24hr
+"In the past 24 hours, when did you wash your hands?",wash_hands_24hr_when
+What do you use to wash your hands?,wash_hands_method
+What are the three most common illnesses affecting all children in this household?,three_children_illnesses
+"In the last two weeks (14 days), how many school-age children in your household experienced vomiting and/or diarrhea? (number of children)",two_weeks_school_children_diarrhea
+"In the last two weeks, how many total school days have school-age children in this household missed due to illness? (No. of days)",two_weeks_children_school_days
+"In the last week (7 days), how many children under 5 years old in your household had vomiting and/or diarrhea?",one_week_children_diarrhea
+Did the child(ren) who had vomiting and/or diarrhea go to hospital?,children_hospital
+Medications given to the child(ren) who had vomiting and/or diarrhea,children_medications
+Is the young child(ren) [< 5 years] who was ill breastfeeding?,ill_child_breastfeed
+What was the outcome of your child(ren)’s most recent vomiting/diarrhea at the hospital?,child_hospital_outcome
+"In the last two weeks, how many days have you personally been unable to do work due to your own stomach pain/diarrhea illness?",two_weeks_days_work_missed
+"In the last two weeks, how many total days have other members of your family been unable to do work due to stomach pain/diarrhea illness?",two_weeks_days_hh_work_missed
+How much money was spent by members of this household for medical treatment for these illnesses in the last four (4) weeks? (in local currency),medical_cost_four_weeks_local
+"Since this time last year, how has your own health changed?",yearly_health_change
+"Since this time last year, how has the overall health of your family changed?",yearly_hh_health_change
+Completed,completed
+Latitude,latitude
+Longitude,longitude
