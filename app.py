@@ -285,12 +285,24 @@ def demographics(initial):
 
 df_initial = get_initial_data()
 df_followup = get_followup_data()
+commuity_selection_options = ['Sankebunase project (Sankebunase, Nkurakan, Amonom, Mampong, Wekpeti)',
+                                'Ekorso project (Ekorso, Adkwadum, Akwaduuso)'] \
+                                + list(df_initial.community.dropna().unique())
 communities = st.multiselect(
-    "Choose communities", list(df_initial.community.dropna().unique())
-    )
+    "Choose communities", commuity_selection_options)
 if not communities:
     st.error("Please select at least one community.")
 else:
+    if commuity_selection_options[0] in communities:
+        group_communities = ['Sankebunase (Nkurakan/Amonon)', 'Sankubenase', 'Nkurakan', 'Amonom', 'Mampong', 'Wekpeti/Abresu']
+        communities.remove(commuity_selection_options[0])
+        communities += group_communities
+    if commuity_selection_options[1] in communities:
+        group_communities = ['Ekorso', 'Akwadum','Akwadusu']
+        communities.remove(commuity_selection_options[1])
+        communities += group_communities
+    communities = list(set(communities))
+    st.write('### selected communities',communities)
     data_initial = get_community(df_initial,communities)
     data_followup = get_community(df_followup,communities)
     st.write('### Initial Survey Data',data_initial)
