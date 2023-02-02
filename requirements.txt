@@ -1,3 +1,5 @@
 matplotlib
 pandas
 openpyxl
+pillow
+PIL
