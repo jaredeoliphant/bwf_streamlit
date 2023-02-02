@@ -293,7 +293,7 @@ def demographics(initial):
 
 
 
-image = Image.open('images/Bright-Water-Foundation-Logo-1.jpg')
+image = Image.open('Bright-Water-Foundation-Logo-1.jpg')
 
 st.image(image)
 
