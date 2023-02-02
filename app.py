@@ -4,6 +4,7 @@ import matplotlib.pyplot as plt
 import numpy as np
 import os
 from pandas.api.types import CategoricalDtype
+from PIL import Image
 
 @st.cache
 def get_initial_data():
@@ -205,17 +206,24 @@ def demographics(initial):
            .round(2)
           ))
 
-    st.write('\n\nHead of Household Demographics')
+    st.write('\n\n ### Head of Household Demographics')
     st.write('\nAverage Age')
     st.write(f'{initial.hh_age.mean():.1f}')
 
     st.write('\nSex')
-    st.write((initial
+    sex = (initial
            .hh_sex
            .value_counts(dropna=False,normalize=True)
            .mul(100)
            .round(2)
-          ))
+          )
+    st.write(sex)
+    fig, ax = plt.subplots()
+    ax.pie(sex.values, labels=sex.index.values,
+            autopct='%1.1f%%', shadow=False, startangle=140)
+    ax.axis('equal')
+    st.pyplot(fig)
+
     st.write('\nMarital Status')
     marital_status = (initial
            .hh_marital
@@ -283,6 +291,14 @@ def demographics(initial):
     st.pyplot(fig)
 
 
+
+
+image = Image.open('images/Bright-Water-Foundation-Logo-1.jpg')
+
+st.image(image)
+
+st.write('This application allows users to explore data from Bright Water Foundation''s work in Africa.')
+
 df_initial = get_initial_data()
 df_followup = get_followup_data()
 commuity_selection_options = ['Sankebunase project (Sankebunase, Nkurakan, Amonom, Mampong, Wekpeti)',
@@ -305,7 +321,7 @@ else:
     st.write('### selected communities',communities)
     data_initial = get_community(df_initial,communities)
     data_followup = get_community(df_followup,communities)
-    st.write('### Initial Survey Data',data_initial)
+    st.write('### Anonymized Initial Survey Data',data_initial.loc[:,'hh_sex':])
     st.write(f'''
         There are
         {data_initial.query('~completed').completed.count()}
@@ -315,11 +331,11 @@ else:
     remove_incomplete = st.checkbox(label='Remove incomplete records',value=True)
     if remove_incomplete:
         data_initial = data_initial.query('completed')
-        st.write('### Initial Survey Data with removed incomplete records',data_initial)
+        st.write('### Anonymized Initial Survey Data with removed incomplete records',data_initial.loc[:,'hh_sex':])
 
 
     st.write('---')
-    st.write('### Follow up Survey Data',data_followup)
+    st.write('### Anonymized Follow up Survey Data',data_followup.loc[:,'interviewee':])
     date_graph(data_initial,data_followup)
     weekday_graph(data_initial)
 
