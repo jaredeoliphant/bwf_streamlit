@@ -17,6 +17,11 @@ def get_followup_data():
     return tweak_bwf_followup(df)
 
 @st.cache
+def get_communitywater_data():
+    df = pd.read_excel('CommunityWaterTest_anon.xlsx')#.iloc[:-1,:]
+    return df
+
+@st.cache
 def followup_rename_func():
     followup_mapping = pd.read_csv('followup_questions_mapping.csv')
     followup_rename = followup_mapping.set_index('0').to_dict()['1']
@@ -354,3 +359,37 @@ else:
     st.write('---')
     st.write('### Demographic summary')
     demographics(data_initial)
+
+    communitywater = get_communitywater_data()
+    st.write('---')
+
+    st.write('### Community Water Tests',communitywater)
+    colilert_test_result = (communitywater['Colilert Test Result']
+                .value_counts(dropna=False,normalize=True)
+                .mul(100)
+                .round(2)
+                )
+    st.write(colilert_test_result)
+
+    fig,ax = plt.subplots()
+    colilert_test_result.plot.bar(ax=ax,
+                                ylabel='% of Tests',
+                                title='Colilert Test Results')
+    ax.grid(axis='y')
+    ax.set_xticklabels(ax.get_xticklabels(), rotation = 45, ha='right')
+    st.pyplot(fig)
+
+    petrifilm_test_result = (communitywater['Petrifilm Test Result']
+                .value_counts(dropna=False,normalize=True)
+                .mul(100)
+                .round(2)
+                )
+    st.write(petrifilm_test_result)
+
+    fig,ax = plt.subplots()
+    petrifilm_test_result.plot.bar(ax=ax,
+                                ylabel='% of Tests',
+                                title='Petrifilm Test Results')
+    ax.grid(axis='y')
+    ax.set_xticklabels(ax.get_xticklabels(), rotation = 45, ha='right')
+    st.pyplot(fig)
