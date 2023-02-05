@@ -8,12 +8,12 @@ from PIL import Image
 
 @st.cache
 def get_initial_data():
-    df = pd.read_excel('InitialSurvey.xlsx').iloc[:-1,:]
+    df = pd.read_excel('InitialSurvey_anon.xlsx')#.iloc[:-1,:]
     return tweak_bwf_initial(df)
 
 @st.cache
 def get_followup_data():
-    df = pd.read_excel('FollowUpSurvey.xlsx').iloc[:-1,:]
+    df = pd.read_excel('FollowUpSurvey_anon.xlsx')#.iloc[:-1,:]
     return tweak_bwf_followup(df)
 
 @st.cache
@@ -40,7 +40,7 @@ def tweak_bwf_initial(df):
         df
         .rename(columns=initial_rename_func())
         .assign(hh_name = lambda df_: df_.hh_name.str.strip(),   # name and phone are the only true free response questions
-                hh_phone = lambda df_: df_.hh_phone.str.strip(),
+                # hh_phone = lambda df_: df_.hh_phone.str.strip(),
                 SWE_name = lambda df_: df_.SWE_name.str.strip()
                )
         .query('country != "Test Country" and community != "Test Village"')
@@ -295,9 +295,10 @@ def demographics(initial):
 
 image = Image.open('Bright-Water-Foundation-Logo-1.jpg')
 
-st.image(image)
 
-st.write('This application allows users to explore data from Bright Water Foundation''s work in Africa.')
+# st.title('Bright Water Foundation')
+st.image(image)
+st.write("This application allows users to explore data from Bright Water Foundation's work in Africa.")
 
 df_initial = get_initial_data()
 df_followup = get_followup_data()
@@ -321,7 +322,7 @@ else:
     st.write('### selected communities',communities)
     data_initial = get_community(df_initial,communities)
     data_followup = get_community(df_followup,communities)
-    st.write('### Anonymized Initial Survey Data',data_initial.loc[:,'hh_sex':])
+    st.write('### Initial Survey Data',data_initial)
     st.write(f'''
         There are
         {data_initial.query('~completed').completed.count()}
@@ -331,11 +332,11 @@ else:
     remove_incomplete = st.checkbox(label='Remove incomplete records',value=True)
     if remove_incomplete:
         data_initial = data_initial.query('completed')
-        st.write('### Anonymized Initial Survey Data with removed incomplete records',data_initial.loc[:,'hh_sex':])
+        st.write('### Initial Survey Data with removed incomplete records',data_initial)
 
 
     st.write('---')
-    st.write('### Anonymized Follow up Survey Data',data_followup.loc[:,'interviewee':])
+    st.write('### Follow up Survey Data',data_followup)
     date_graph(data_initial,data_followup)
     weekday_graph(data_initial)
 
