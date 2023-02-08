@@ -33,12 +33,10 @@ def initial_rename_func():
     initial_rename = initial_mapping.set_index('0').to_dict()['1']
     return initial_rename
 
-
 def remove_test_records(df):
     # st.write(f'removed household names:')
     # st.write(df[df.hh_name.str.contains('test',case=False).fillna(False)].hh_name.unique())
     return df[~df.hh_name.str.contains('test',case=False).fillna(False)]
-
 
 def tweak_bwf_initial(df):
     return (
@@ -87,9 +85,16 @@ def tweak_bwf_followup(df):
                )
     )
 
+def tweak_communitywater(df):
+    return (
+        df
+        .rename(columns={'Country':'country','Community':'community','Completed':'completed'})
+        .query('country != "Test Country" and community != "Test Village"')
+        .astype({'completed':'bool'})
+    )
+
 def get_community(df,communities):
     return df.query('community.isin(@communities).values')
-
 
 def weekday_graph(data):
     mapdict = {'0':'Mon','1':'Tues','2':'Wed','3':'Thur','4':'Fr','5':'Sat','6':'Sun'}
@@ -295,13 +300,8 @@ def demographics(initial):
     ax.set_xticklabels(ax.get_xticklabels(), rotation = 45, ha='right')
     st.pyplot(fig)
 
-
-
-
 image = Image.open('Bright-Water-Foundation-Logo-1.jpg')
 
-
-# st.title('Bright Water Foundation')
 st.image(image)
 st.write("This application allows users to explore data from Bright Water Foundation's work in Africa.")
 
@@ -325,6 +325,7 @@ else:
         communities += group_communities
     communities = list(set(communities))
     st.write('### selected communities',communities)
+
     data_initial = get_community(df_initial,communities)
     data_followup = get_community(df_followup,communities)
     st.write('### Initial Survey Data',data_initial)
@@ -343,6 +344,10 @@ else:
     st.write('---')
     st.write('### Follow up Survey Data',data_followup)
     date_graph(data_initial,data_followup)
+
+    split_date = st.date_input('Split Date Between 3 months and 6 months')
+    st.write(split_date)
+
     weekday_graph(data_initial)
 
     st.write('---')
@@ -360,7 +365,104 @@ else:
     st.write('### Demographic summary')
     demographics(data_initial)
 
-    communitywater = get_communitywater_data()
+    st.write('##')
+    st.write('---')
+    st.write('How much money was spent by members of this household for medical treatment for these illnesses in the last four (4) weeks? (in local currency)')
+    fig1,ax1 = plt.subplots()
+    (data_initial
+    .medical_cost_four_weeks_local
+    .plot.hist(ax=ax1,title='Initial Survey Medical Costs')
+    )
+    ax1.grid(axis='y')
+    ax1.set_xlabel('Medical Costs Previous 4 Weeks (Local Currency)')
+
+    fig2,ax2 = plt.subplots()
+    (data_followup
+    .medical_cost_four_weeks_local
+    .plot.hist(ax=ax2,title='Follow Up Survey Medical Costs')
+    )
+    ax2.grid(axis='y')
+    ax2.set_xlabel('Medical Costs Previous 4 Weeks (Local Currency)')
+
+    col1, col2 = st.columns(2)
+    col1.pyplot(fig1)
+    col2.pyplot(fig2)
+    # st.pyplot(fig)
+
+
+    st.write('In the last two weeks, how many days have you personally been unable to do work due to your own stomach pain/diarrhea illness?')
+    # st.write('---')
+    col1, col2 = st.columns(2)
+    col1.write('#### Initial Survey')
+    col1.write(data_initial.two_weeks_days_work_missed.value_counts(normalize=True).mul(100).round(2))
+    col1.write('sum of work days missed')
+    col1.write(data_initial.two_weeks_days_work_missed.sum())
+
+    col2.write('#### Follow Up Survey')
+    col2.write(data_followup.two_weeks_days_work_missed.value_counts(normalize=True).mul(100).round(2))
+    col2.write('sum of work days missed')
+    col2.write(data_followup.two_weeks_days_work_missed.sum())
+
+
+    st.write('In the last two weeks, how many total days have other members of your family been unable to do work due to stomach pain/diarrhea illness?')
+    col1, col2 = st.columns(2)
+    col1.write('#### Initial Survey')
+    col1.write(data_initial.two_weeks_days_hh_work_missed.value_counts(normalize=True).mul(100).round(2))
+    col1.write('sum of work days missed household')
+    col1.write(data_initial.two_weeks_days_hh_work_missed.sum())
+
+    col2.write('#### Follow Up Survey')
+    col2.write(data_followup.two_weeks_days_hh_work_missed.value_counts(normalize=True).mul(100).round(2))
+    col2.write('sum of work days missed household')
+    col2.write(data_followup.two_weeks_days_hh_work_missed.sum())
+
+
+    st.write('In the last two weeks, how many total school days have school-age children in this household missed due to illness? (No. of days)')
+    col1, col2 = st.columns(2)
+    col1.write('#### Initial Survey')
+    col1.write(data_initial.two_weeks_children_school_days.value_counts(normalize=True).mul(100).round(2))
+    col1.write('sum of school days missed')
+    col1.write(data_initial.two_weeks_children_school_days.sum())
+
+    col2.write('#### Follow Up Survey')
+    col2.write(data_followup.two_weeks_children_school_days.value_counts(normalize=True).mul(100).round(2))
+    col2.write('sum of school days missed')
+    col2.write(data_followup.two_weeks_children_school_days.sum())
+
+
+
+    st.write('Do you treat your water in any way to make it safer to drink?')
+    col1, col2 = st.columns(2)
+    col1.write('#### Initial Survey')
+    col1.write(data_initial.treat_water.value_counts(normalize=True,dropna=False).mul(100).round(2))
+
+    col2.write('#### Follow Up Survey')
+    col2.write(data_followup.treat_water.value_counts(normalize=True,dropna=False).mul(100).round(2))
+
+
+
+    st.write('How often do you treat your water to make it safe?')
+    col1, col2 = st.columns(2)
+    col1.write('#### Initial Survey')
+    col1.write(data_initial.treat_water_freq.value_counts(normalize=True,dropna=False).mul(100).round(2))
+
+    col2.write('#### Follow Up Survey')
+    col2.write(data_followup.treat_water_freq.value_counts(normalize=True,dropna=False).mul(100).round(2))
+
+
+
+    st.write('When was the last time you treated your household drinking water with chlorine?')
+    col1, col2 = st.columns(2)
+    col1.write('#### Initial Survey')
+    col1.write(data_initial.treat_water_last_chlorine.value_counts(normalize=True,dropna=False).mul(100).round(2))
+
+    col2.write('#### Follow Up Survey')
+    col2.write(data_followup.treat_water_last_chlorine.value_counts(normalize=True,dropna=False).mul(100).round(2))
+
+
+    communitywater_df = get_communitywater_data()
+    communitywater = get_community(tweak_communitywater(communitywater_df),communities)
+    st.write('##')
     st.write('---')
 
     st.write('### Community Water Tests',communitywater)
