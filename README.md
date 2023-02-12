@@ -1,4 +1,3 @@
 # bwf_streamlit
 
-deployed at:
-https://jaredeoliphant-bwf-streamlit-app-68qmsq.streamlit.app/
+deployed at: https://jaredeoliphant-bwf-streamlit-home-r19bxh.streamlit.app/
