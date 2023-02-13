@@ -1,4 +1,9 @@
 import streamlit as st
+from PIL import Image
+
+image = Image.open('Bright-Water-Foundation-Logo-1.jpg')
+
+st.image(image)
 
 st.title('BRIGHT WATER FOUNDATION (BWF) \nATIWA WEST DISTRICT, EASTERN REGION, GHANA')
 st.write('LDS Charities Sankubenase Village Safe Water Project #WE21GHA0005')
