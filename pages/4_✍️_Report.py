@@ -187,8 +187,9 @@ completing subsequent surveys were associated with a 8.67 (time 1) and 8.13 (tim
 water increased immensely after people started the program.
 ''')
 
-st.write("""
-Staff Training. A competent cadre of 35 Safe Water Educators (SWEs) and village volunteers were
+st.markdown("""
+#### 1. Staff Training
+A competent cadre of 35 Safe Water Educators (SWEs) and village volunteers were
 identified for the target communities. An eight-day training was provided by a U.S. team in
 September 2021 on all facets of the BWF methodology. All SWEs were high school graduates or
 college educated. Many were local district health workers or classroom teachers. All lived in or near
@@ -198,7 +199,7 @@ appointed and thoroughly trained with the SWEs. These representatives have provi
 government coordination with the project. Attrition of staff was minimal.
 """)
 st.markdown("""
-### 2. Village Education
+#### 2. Village Education
 A total of 1,144 village education meetings were reported during the 12-month
 period by the SWEs and village volunteers. Each meeting was verified by a household telephone
 number, number of adults attending, and number of gratis chlorine tablets distributed. As
@@ -208,10 +209,12 @@ all four education lessons. In most cases individual households were educated at
 (compounds), although in some cases two or more households attended together. Virtually all
 students enrolled in the local village schools were also given safe water instruction.
 """)
-st.write("""
-**3. Household Drinking Water Quality.** Two measures were used to discern changes in the quality of
+st.markdown("""
+#### 3. Household Drinking Water Quality
+Two measures were used to discern changes in the quality of
 water in household water supplies.
-a. Periodic Surveys. Each sample household was queried about water use behaviors in the home,
+##### a. Periodic Surveys
+Each sample household was queried about water use behaviors in the home,
 including water treatment, at the onset of the project, prior to the Bright Water Teach-Test-
 #Treat intervention. Subsequent surveys were conducted at the end of the 6th and 12th months
 of the project. The following results were reported:
