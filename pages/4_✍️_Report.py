@@ -158,7 +158,8 @@ by at least 25%.
 
 st.subheader('IV. Project Results')
 st.write('''
-This report provides documentation on the results of the first-year activity for the stated objectives.''')
+This report provides documentation on the results of the first-year activity for the stated objectives.
+''')
 
 
 
@@ -186,7 +187,6 @@ completing subsequent surveys were associated with a 8.67 (time 1) and 8.13 (tim
 water increased immensely after people started the program.
 ''')
 
-''')
 st.write("""
 Staff Training. A competent cadre of 35 Safe Water Educators (SWEs) and village volunteers were
 identified for the target communities. An eight-day training was provided by a U.S. team in
