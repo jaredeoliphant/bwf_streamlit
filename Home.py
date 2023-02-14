@@ -286,17 +286,17 @@ def main():
 
         data_initial = get_community(df_initial,communities)
         data_followup = get_community(df_followup,communities)
-
-        st.write('### Initial Survey Data',data_initial)
+        
+        st.write('### Initial Survey Data',data_initial.drop(columns=['HeadHouseholdPhoneNumber','Namebwe']))
 
         st.write('---')
-        st.write('### Follow up Survey Data',data_followup)
+        st.write('### Follow up Survey Data',data_followup.drop(columns=['Namebwe']))
         date_graph(data_initial,data_followup)
 
         weekday_graph(data_initial)
 
         st.write('---')
-        st.write('### Number of Surveys conducted per Safe Water Educator',data_initial.Namebwe.value_counts())
+        # st.write('### Number of Surveys conducted per Safe Water Educator',data_initial.Namebwe.value_counts())
 
         dup_name = data_initial.HeadHouseholdName.value_counts().loc[lambda x: x > 1]
         if dup_name.any():
