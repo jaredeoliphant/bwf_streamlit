@@ -104,7 +104,12 @@ def demographics(initial):
            .UsualHouseholdWaterFetcher
            .value_counts(dropna=False)
           )
-    st.write(pd.concat([who_collects,who_collects_count],axis=1,keys=('Usual Household Water Fetcher (%)','Usual Household Water Fetcher (count)'))
+    st.write(
+        pd.concat([who_collects,who_collects_count],
+                  axis=1,
+                  keys=('Usual Household Water Fetcher (%)','Usual Household Water Fetcher (count)')
+                 )
+    )
     fig,ax = plt.subplots()
     who_collects.plot.bar(ax=ax,ylabel='% of Respondents',title='Who Collects Water?').grid(axis='y')
     ax.set_xticklabels(ax.get_xticklabels(), rotation = 45, ha='right')
