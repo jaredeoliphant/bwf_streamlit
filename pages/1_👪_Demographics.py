@@ -58,13 +58,23 @@ def demographics(initial):
             .astype('category')
             .map(water_mapping)
             .astype(water_cat)
+          )
+    water_collection_freq_pct = (water_collection_freq
             .value_counts(dropna=False,normalize=True,sort=False)
             .mul(100)
             .round(2)
           )
-    st.write(water_collection_freq)
+    water_collection_freq_count = (water_collection_freq
+            .value_counts(dropna=False,sort=False)
+          )
+    st.write(
+        pd.concat([water_collection_freq_pct,water_collection_freq_count],
+                  axis=1,
+                  keys=('Water Collection Frequency (%)','Water Collection Frequency (count)')
+                 )
+    )
     fig,ax = plt.subplots()
-    water_collection_freq.plot.bar(ax=ax,ylabel='% of Respondents',title='Water Collection Frequency').grid(axis='y')
+    water_collection_freq_pct.plot.bar(ax=ax,ylabel='% of Respondents',title='Water Collection Frequency').grid(axis='y')
     ax.set_xticklabels(ax.get_xticklabels(), rotation = 45, ha='right')
     st.pyplot(fig)
 
@@ -117,13 +127,25 @@ def demographics(initial):
 
 
     st.write('\nWater Container')
-    st.write((initial
+    water_container = (initial
            .ContainerCarryWater
            .value_counts(dropna=False,normalize=True)
            .mul(100)
            .round(2)
-          ))
-
+          )
+    water_container_count = (initial
+           .ContainerCarryWater
+           .value_counts(dropna=False)
+          )
+    st.write(
+        pd.concat([water_container,water_container_count],
+                  axis=1,
+                  keys=('Water Container (%)','Water Container (count)')
+                 )
+    )
+    
+    
+    
     st.write('\n\n ### Head of Household Demographics')
     st.write('\nAverage Age')
     st.write(f'{initial.HeadHouseholdAge.mean():.1f}')
@@ -135,7 +157,16 @@ def demographics(initial):
            .mul(100)
            .round(2)
           )
-    st.write(sex)
+    sex_count = (initial
+           .HeadHouseholdSex
+           .value_counts(dropna=False)
+          )
+    st.write(
+        pd.concat([sex,sex_count],
+                  axis=1,
+                  keys=('Head Household Sex (%)','Head Household Sex (count)')
+                 )
+    )
     fig, ax = plt.subplots()
     ax.pie(sex.values, labels=sex.index.values,
             autopct='%1.1f%%', shadow=False, startangle=140)
@@ -149,7 +180,16 @@ def demographics(initial):
            .mul(100)
            .round(2)
           )
-    st.write(marital_status)
+    marital_status_count = (initial
+           .HeadHouseholdMaritalStatus
+           .value_counts(dropna=False)
+          )
+    st.write(
+        pd.concat([marital_status,marital_status_count],
+                  axis=1,
+                  keys=('Head Household Marital Status (%)','Head Household Marital Status (count)')
+                 )
+    )
     fig,ax = plt.subplots()
     marital_status.plot.bar(ax=ax,ylabel='% of Respondents',title='Head of Household Marital Status').grid(axis='y')
     ax.set_xticklabels(ax.get_xticklabels(), rotation = 45, ha='right')
@@ -175,13 +215,23 @@ def demographics(initial):
            .astype('category')
            .map(ed_mapping)
            .astype(ed_cat)
+          )
+    education_pct = (education
            .value_counts(dropna=False,normalize=True,sort=False)
            .mul(100)
            .round(2)
           )
-    st.write(education)
+    education_count = (education
+           .value_counts(dropna=False,sort=False)
+          )
+    st.write(
+        pd.concat([education_pct,education_count],
+                  axis=1,
+                  keys=('Head Household Education (%)','Head Household Education (count)')
+                 )
+    )
     fig,ax = plt.subplots()
-    education.plot.bar(ax=ax,ylabel='% of Respondents',title='Head of Household Education Level').grid(axis='y')
+    education_pct.plot.bar(ax=ax,ylabel='% of Respondents',title='Head of Household Education Level').grid(axis='y')
     ax.set_xticklabels(ax.get_xticklabels(), rotation = 45, ha='right')
     st.pyplot(fig)
 
@@ -198,13 +248,23 @@ def demographics(initial):
        .HeadHouseholdOccupation
        .astype('category')
        .map(occ_mapping)
+      )
+    occupation_pct = (occupation
        .value_counts(dropna=False,normalize=True)
        .mul(100)
        .round(2)
       )
-    st.write(occupation)
+    occupation_count = (occupation
+       .value_counts(dropna=False)
+      )
+    st.write(
+        pd.concat([occupation_pct,occupation_count],
+                  axis=1,
+                  keys=('Head Household Occupation (%)','Head Household Occupation (count)')
+                 )
+    )
     fig,ax = plt.subplots()
-    occupation.plot.bar(ax=ax,ylabel='% of Respondents',title='Head of Household Occupation').grid(axis='y')
+    occupation_pct.plot.bar(ax=ax,ylabel='% of Respondents',title='Head of Household Occupation').grid(axis='y')
     ax.set_xticklabels(ax.get_xticklabels(), rotation = 45, ha='right')
     st.pyplot(fig)
 
