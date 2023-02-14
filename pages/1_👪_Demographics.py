@@ -11,23 +11,25 @@ def demographics(initial):
     st.write('Systematic Survey Sample:\n')
 
     st.write(f'Number of Survey Entries (Families): {initial.id.size}')
-    st.write(f'Number of Unique Household Names: {initial.hh_name.nunique()}')
-    total_pop = initial.hh_size.sum()
+    st.write(f'Number of Unique Household Names: {initial.HeadHouseholdName.nunique()}')
+    total_pop = initial.TotalNoPeopleHousehold.sum()
     st.write(f'Total Survey Population: {total_pop:n}')
-    st.write(f'Average family size: {initial.hh_size.mean():.2f}')
+    st.write(f'Average family size: {initial.TotalNoPeopleHousehold.mean():.2f}')
 
-    children5 = initial.loc[:,'males_0_1_yr':'females_1_5_yr'].sum().sum()
+    childrencolumns = ['NoHouseholdMale0_1Year','NoHouseholdFemale0_1Year',
+                       'NoHouseholdMale1_5Year','NoHouseholdFemale1_5Year']
+    children5 = initial.loc[:,childrencolumns].sum().sum()
     st.write(f'{100*children5/total_pop:.2f}% less than 5 yrs')
-    children12 = initial.loc[:,'males_0_1_yr':'females_5_12_yr'].sum().sum()
+    childrencolumns += ['NoHouseholdMale5_12Year','NoHouseholdFemale5_12Year']
+    children12 = initial.loc[:,childrencolumns].sum().sum()
     st.write(f'{100*children12/total_pop:.2f}% less than 12 yrs')
-    children18 = initial.loc[:,'males_0_1_yr':'females_12_17_yr'].sum().sum()
+    childrencolumns += ['NoHouseholdMale13_17Year','NoHouseholdFemale13_17Year']
+    children18 = initial.loc[:,childrencolumns].sum().sum()
     st.write(f'{100*children18/total_pop:.2f}% less than 18 yrs')
-
-    # st.write(initial.child_fatalities.value_counts())
 
     st.write('\nSources of Drinking Water')
     st.write((initial
-           .drinking_water_source
+           .MainSourceDrinkingWater
            .value_counts(dropna=False,normalize=True)
            .mul(100)
            .round(2)
@@ -35,7 +37,7 @@ def demographics(initial):
 
     st.write('\nSources of Non-Drinking Water')
     st.write((initial
-           .nondrinking_water_source
+           .MainSourceOtherPurposeWater
            .value_counts(dropna=False,normalize=True)
            .mul(100)
            .round(2)
@@ -43,16 +45,16 @@ def demographics(initial):
 
     st.write('\nWater Collection Frequency')
     water_mapping = {
-        '2 or more times per day':'Two or More Times Daily',
-        'Once daily':'Once Daily',
-        'Every other day':'Every Other Day',
-        'Every 3rd day':'Every Third Day',
-        'Weekly':'Weekly'
+        '2ORMORETIMEPERDAY':'Two or More Times Daily',
+        'ONCEDAILY':'Once Daily',
+        'EVERYOTHERDAY':'Every Other Day',
+        'EVERYTHIRDDAY':'Every Third Day',
+        'WEEKLY':'Weekly'
     }
     water_cat = CategoricalDtype(categories=['Two or More Times Daily','Once Daily',
                                           'Every Other Day','Every Third Day','Weekly'], ordered=True)
     water_collection_freq = (initial
-            .freq_fetch_water
+            .HouseholdFrequencyAtWaterSource
             .astype('category')
             .map(water_mapping)
             .astype(water_cat)
@@ -70,10 +72,10 @@ def demographics(initial):
     water_collection_bins = [0]
     for i in range(15):
         water_collection_bins.append(water_collection_bins[-1]+10)
-        if water_collection_bins[-1] >= initial.minutes_fetch_water.max():
-            water_collection_bins[-1] = initial.minutes_fetch_water.max()
+        if water_collection_bins[-1] >= initial.TimeToWaterSourceGetReturn.max():
+            water_collection_bins[-1] = initial.TimeToWaterSourceGetReturn.max()
             break
-    water_collection_time = (pd.cut(initial.minutes_fetch_water,
+    water_collection_time = (pd.cut(initial.TimeToWaterSourceGetReturn,
                                     water_collection_bins,
                                     right=True,include_lowest=True)
                                     .value_counts(normalize=True,sort=False)
@@ -92,8 +94,8 @@ def demographics(initial):
     st.pyplot(fig)
 
     st.write('\nWho Collects Water')
-    who_collects = (initial.
-           who_fetch_water
+    who_collects = (initial
+           .UsualHouseholdWaterFetcher
            .value_counts(dropna=False,normalize=True)
            .mul(100)
            .round(2)
@@ -107,7 +109,7 @@ def demographics(initial):
 
     st.write('\nWater Container')
     st.write((initial
-           .fetch_water_container
+           .ContainerCarryWater
            .value_counts(dropna=False,normalize=True)
            .mul(100)
            .round(2)
@@ -115,11 +117,11 @@ def demographics(initial):
 
     st.write('\n\n ### Head of Household Demographics')
     st.write('\nAverage Age')
-    st.write(f'{initial.hh_age.mean():.1f}')
+    st.write(f'{initial.HeadHouseholdAge.mean():.1f}')
 
     st.write('\nSex')
     sex = (initial
-           .hh_sex
+           .HeadHouseholdSex
            .value_counts(dropna=False,normalize=True)
            .mul(100)
            .round(2)
@@ -133,7 +135,7 @@ def demographics(initial):
 
     st.write('\nMarital Status')
     marital_status = (initial
-           .hh_marital
+           .HeadHouseholdMaritalStatus
            .value_counts(dropna=False,normalize=True)
            .mul(100)
            .round(2)
@@ -147,20 +149,20 @@ def demographics(initial):
 
     st.write('\nEducation')
     ed_mapping = {
-        'Completed Jr. High school':'Completed Jr. High',
-        'Some Jr. High school':'Completed Primary School',
-        'Some primary school':'Some or No Primary School',
-        'No formal education':'Some or No Primary School',
-        'Completed primary school':'Completed Primary School',
-        'Some Sr. High School':'Completed Jr. High',
-        'Completed Sr. High School':'Completed High School',
-        'Some education beyond High School':'Some Education Beyond High School'
+        'COMPLETEDJRHIGHSCHOOL':'Completed Jr. High',
+        'SOMEJRHIGHSCHOOL':'Completed Primary School',
+        'SOMEPRIMARYSCHOOL':'Some or No Primary School',
+        'NOFORMALEDUCATION':'Some or No Primary School',
+        'COMPLETEDPRIMARYSCHOOL':'Completed Primary School',
+        'SOMESRHIGHSCHOOL':'Completed Jr. High',
+        'COMPLETEDSRHIGHSCHOOL':'Completed High School',
+        'SOMEEDUCATIONBEYONDHIGHSCHOOL':'Some Education Beyond High School'
     }
     ed_cat = CategoricalDtype(categories=['Some or No Primary School','Completed Primary School',
                                           'Completed Jr. High','Completed High School',
                                           'Some Education Beyond High School'], ordered=True)
     education = (initial
-           .hh_education
+           .HeadHouseholdEducation
            .astype('category')
            .map(ed_mapping)
            .astype(ed_cat)
@@ -176,15 +178,15 @@ def demographics(initial):
 
     st.write('\nOccupation')
     occ_mapping = {
-        'Farmer':'Farmer',
-        'Trader':'Trader',
-        'Other':'Other/None',
-        'None':'Other/None',
-        'civil servant (works for government)':'Civil Servant/Teacher',
-        'Teacher':'Civil Servant/Teacher'
+        'FARMER':'Farmer',
+        'TRADER':'Trader',
+        'OTHER':'Other/None',
+        'NONE':'Other/None',
+        'CIVILSERVANT':'Civil Servant/Teacher',
+        'TEACHER':'Civil Servant/Teacher'
     }
     occupation = (initial
-       .hh_occupation
+       .HeadHouseholdOccupation
        .astype('category')
        .map(occ_mapping)
        .value_counts(dropna=False,normalize=True)
@@ -206,11 +208,10 @@ st.write("This application allows users to explore data from Bright Water Founda
 df_initial = get_initial_data()
 commuity_selection_options = ['Sankebunase project (Sankebunase, Nkurakan, Amonom, Mampong, Wekpeti)',
                                 'Ekorso project (Ekorso, Akwadum, Akwadusu)'] \
-                                + list(df_initial.community.dropna().unique())
+                                + list(df_initial.Community.dropna().unique())
 if 'c_select' not in st.session_state:
     st.session_state.c_select = []
-# st.write(st.session_state)
-# st.write(commuity_selection_options)
+
 communities = st.sidebar.multiselect(
     "Choose communities", commuity_selection_options,
     default = st.session_state.c_select)
@@ -229,37 +230,10 @@ else:
     communities = list(set(communities))
     st.session_state.c_select = communities
 
-    # st.session_state.c_select = communities
     st.write('### selected communities',st.session_state.c_select)
 
     data_initial = get_community(df_initial,communities)
-    # data_followup = get_community(df_followup,communities)
-    # st.write('### Initial Survey Data',data_initial)
-    st.write(f'''
-        There are
-        {data_initial.query('~completed').completed.count()}
-        records that are marked as "incomplete",
-        do you want to remove them?
-        ''')
-    remove_incomplete = st.checkbox(label='Remove incomplete records',value=True)
-    if remove_incomplete:
-        data_initial = data_initial.query('completed')
-        # st.write('### Initial Survey Data with removed incomplete records',data_initial)
-
-
-    # weekday_graph(data_initial)
-
-    # st.write('---')
-    # st.write('### Number of Surveys conducted per Safe Water Educator',data_initial.SWE_name.value_counts())
-
-    # dup_name = data_initial.hh_name.value_counts().loc[lambda x: x > 1]
-    # if dup_name.any():
-    #     st.write('---')
-    #     st.write('#### These household names are duplicated in this dataset',dup_name)
-    # else:
-    #     st.write('---')
-    #     st.write('#### There are no duplicate household names in this dataset')
-
+    
     st.write('---')
     st.write('### Demographic summary')
     demographics(data_initial)
