@@ -5,20 +5,144 @@ import numpy as np
 import os
 from pandas.api.types import CategoricalDtype
 from PIL import Image
+import jwt
+import requests
 
-@st.cache
+
+@st.cache(ttl=3600) #1 hour
+def get_api_token() -> str:
+    server_name = os.environ['API_SERVER_URL']
+    cert_key = os.environ['CERT_NAME']
+    encoded = os.environ['ENCODED_CERT']
+    resp = requests.get(
+        f"{server_name}/auth",
+        headers={
+            'mykey': cert_key,
+            'test': encoded,
+        }
+    )
+    if resp.status_code != 200:
+        st.error(f"status_code={resp.status_code}, {data['msg']}")
+        return None
+
+    data = resp.json()
+    return data['access_token']
+
+
+def decrypt_api_response(encryted_data: str) -> pd.DataFrame:
+    server_public_key = os.environ['PUBLIC_KEY']
+    query_results = jwt.decode(encryted_data, server_public_key, ["RS256"])
+    data = query_results["data"]
+    return pd.DataFrame(data)
+
+
+
+def query_api(token: str, query_data: dict, table: str) -> pd.DataFrame:
+    server_name = os.environ['API_SERVER_URL']
+    server_public_key = os.environ['PUBLIC_KEY']
+    resp = requests.post(
+        f"{server_name}/query/{table}",
+        data=query_data,
+        headers={
+            "Authorization": f"Bearer {token}",
+        }
+    )
+
+    if resp.status_code != 200:
+        st.error(f"status_code={resp.status_code}, {resp.json()}")
+        return False
+        # query data will be encrypted with server cert
+    query_results = resp.json()
+    # load server public cert
+    # server_public_key = open('certs/server/2023-02-10.pub', 'rb').read()
+    # decrypt query results with server public cert
+    return decrypt_api_response(query_results)
+
+
+# table names
+# CommunityWater
+# CommunityWaterTest
+# FollowUpSurvey
+# HealthCheckSurvey
+# HouseholdAttendingMeeting
+# HouseholdWaterTest
+# InitialSurvey
+# Meeting
+# SWEMonthlyClinicSummary
+# SWEMonthlySchoolSummary
+# SWEMonthlySummary
+# SWEMonthlyTotalSummary
+# Volunteer
+# VolunteerHousehold
+# VolunteerHouseholdWaterTest
+# VolunteerMonthlySummary
+# VolunteerMonthlyTotalSummary
+
+@st.cache(ttl=3600*24) # 24 hrs
 def get_initial_data():
-    df = pd.read_excel('InitialSurvey_anon.xlsx')#.iloc[:-1,:]
-    return tweak_bwf_initial(df)
+    query_data = {
+            "query": str({
+                "$and": [
+                    {"Country": "Ghana"},
+                    {"Completed": 1},
+                    {"disabled": {"$ne": True}},
+                ]
+            }),
+            "extra": str({
+                "sort": [
+                    ("date", 1)
+                ]
+            }),
+        }
+    # df = pd.read_excel('InitialSurvey_anon.xlsx')#.iloc[:-1,:]
+    token = get_api_token()
+    table = 'InitialSurvey'
+    df = query_api(token, query_data, table)
+    return df
 
-@st.cache
+@st.cache(ttl=3600*24) # 24 hrs
 def get_followup_data():
-    df = pd.read_excel('FollowUpSurvey_anon.xlsx')#.iloc[:-1,:]
-    return tweak_bwf_followup(df)
+    query_data = {
+            "query": str({
+                "$and": [
+                    {"Country": "Ghana"},
+                    {"Completed": 1},
+                    {"disabled": {"$ne": True}},
+                ]
+            }),
+            "extra": str({
+                "sort": [
+                    ("date", 1)
+                ]
+            }),
+        }
+    # df = pd.read_excel('InitialSurvey_anon.xlsx')#.iloc[:-1,:]
+    token = get_api_token()
+    table = 'FollowUpSurvey'
+    df = query_api(token, query_data, table)
+    return df
 
-@st.cache
+@st.cache(ttl=3600*24) # 24 hrs
 def get_communitywater_data():
-    df = pd.read_excel('CommunityWaterTest_anon.xlsx')#.iloc[:-1,:]
+    query_data = {
+            "query": str({
+                "$and": [
+                    {"Country": "Ghana"},
+                    {"Completed": 1},
+                    {"disabled": {"$ne": True}},
+                ]
+            }),
+            "extra": str({
+                "sort": [
+                    ("date", 1)
+                ]
+            }),
+        }
+    # df = pd.read_excel('InitialSurvey_anon.xlsx')#.iloc[:-1,:]
+    token = get_api_token()
+    table = 'CommunityWaterTest'
+    # table = 'CommunityWater'
+    df = query_api(token, query_data, table)
     return df
 
 @st.cache
@@ -102,18 +226,21 @@ def tweak_communitywater(df):
     )
 
 def get_community(df,communities):
-    return df.query('community.isin(@communities).values')
+    return df.query('Community.isin(@communities).values')
 
 def weekday_graph(data):
     mapdict = {'0':'Mon','1':'Tues','2':'Wed','3':'Thur','4':'Fr','5':'Sat','6':'Sun'}
     fig, ax = plt.subplots()
-    data.date.dt.day_of_week.value_counts().sort_index().plot.bar(ylabel='Initial Surveys Conducted',title='Day of Week Initial Survey was conducted',ax=ax)
+    datedata = pd.to_datetime(data.date)
+    datedata.dt.day_of_week.value_counts().sort_index().plot.bar(ylabel='Initial Surveys Conducted',title='Day of Week Initial Survey was conducted',ax=ax)
     newlabels = [mapdict[tck.get_text()] for tck in ax.get_xticklabels()]
     ax.set_xticklabels(newlabels)
     ax.grid(axis='y')
     st.pyplot(fig)
 
 def date_graph(data_i,data_f):
+    data_i = data_i.assign(date = pd.to_datetime(data_i.date))
+    data_f = data_f.assign(date = pd.to_datetime(data_f.date))
     weekly = data_f.groupby(pd.Grouper(key='date',freq='W')).id.count()
     fig,ax = plt.subplots()
     weekly.plot.area(ax=ax,title='Initial and Follow up survey date',label='Follow up')
@@ -125,6 +252,7 @@ def date_graph(data_i,data_f):
 
 
 def main():
+
     image = Image.open('Bright-Water-Foundation-Logo-1.jpg')
 
     st.image(image)
@@ -134,7 +262,7 @@ def main():
     df_followup = get_followup_data()
     commuity_selection_options = ['Sankebunase project (Sankebunase, Nkurakan, Amonom, Mampong, Wekpeti)',
                                     'Ekorso project (Ekorso, Akwadum, Akwadusu)'] \
-                                    + list(df_initial.community.dropna().unique())
+                                    + list(df_initial.Community.dropna().unique())
     if 'c_select' not in st.session_state:
         st.session_state.c_select = []
     communities = st.sidebar.multiselect(
@@ -158,32 +286,19 @@ def main():
 
         data_initial = get_community(df_initial,communities)
         data_followup = get_community(df_followup,communities)
-        st.write('### Initial Survey Data',data_initial)
-        st.write(f'''
-            There are
-            {data_initial.query('~completed').completed.count()}
-            records that are marked as "incomplete",
-            do you want to remove them?
-            ''')
-        remove_incomplete = st.checkbox(label='Remove incomplete records',value=True)
-        if remove_incomplete:
-            data_initial = data_initial.query('completed')
-            st.write('### Initial Survey Data with removed incomplete records',data_initial)
 
+        st.write('### Initial Survey Data',data_initial)
 
         st.write('---')
         st.write('### Follow up Survey Data',data_followup)
         date_graph(data_initial,data_followup)
 
-        split_date = st.date_input('Split Date Between 3 months and 6 months')
-        st.write(split_date)
-
         weekday_graph(data_initial)
 
         st.write('---')
-        st.write('### Number of Surveys conducted per Safe Water Educator',data_initial.SWE_name.value_counts())
+        st.write('### Number of Surveys conducted per Safe Water Educator',data_initial.Namebwe.value_counts())
 
-        dup_name = data_initial.hh_name.value_counts().loc[lambda x: x > 1]
+        dup_name = data_initial.HeadHouseholdName.value_counts().loc[lambda x: x > 1]
         if dup_name.any():
             st.write('---')
             st.write('#### These household names are duplicated in this dataset',dup_name)
