@@ -2,5 +2,4 @@ matplotlib
 pandas
 openpyxl
 pillow
-jwt
 pyjwt
