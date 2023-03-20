@@ -7,22 +7,18 @@ from pandas.api.types import CategoricalDtype
 from PIL import Image
 import jwt
 import requests
-from typing import Callable
+import typing
 
 
 @st.cache_data(ttl=3600)  # 1 hour
-def get_api_token() -> str | None:
+def get_api_token() -> typing.Union[str, None]:
     """returns API token (str) based on environment variables. Returns None
     if API call fails"""
     server_name = os.environ["API_SERVER_URL"]
     cert_key = os.environ["CERT_NAME"]
     encoded = os.environ["ENCODED_CERT"]
     resp = requests.get(
-        f"{server_name}/auth",
-        headers={
-            "mykey": cert_key,
-            "test": encoded,
-        },
+        f"{server_name}/auth", headers={"mykey": cert_key, "test": encoded,},
     )
     if resp.status_code != 200:
         st.error(f"status_code={resp.status_code}, {data['msg']}")
@@ -41,7 +37,9 @@ def decrypt_api_response(encryted_data: str) -> pd.DataFrame:
     return pd.DataFrame(data)
 
 
-def query_api(token: str, query_data: dict, table: str) -> pd.DataFrame | None:
+def query_api(
+    token: str, query_data: dict, table: str
+) -> typing.Union[pd.DataFrame, None]:
     """runs a query on the API according to the following inputs:
     token=Authorization token retreived previously
     query_data=dictionary with all query parameters
@@ -52,9 +50,7 @@ def query_api(token: str, query_data: dict, table: str) -> pd.DataFrame | None:
     resp = requests.post(
         f"{server_name}/query/{table}",
         data=query_data,
-        headers={
-            "Authorization": f"Bearer {token}",
-        },
+        headers={"Authorization": f"Bearer {token}",},
     )
 
     if resp.status_code != 200:
@@ -89,7 +85,7 @@ def query_api(token: str, query_data: dict, table: str) -> pd.DataFrame | None:
 
 
 @st.cache_data(ttl=3600 * 24)  # 24 hrs
-def get_data(tableName:str) -> pd.DataFrame | None:
+def get_data(tableName: str) -> typing.Union[pd.DataFrame, None]:
     """returns pandas DataFrame of all {tableName} data from Ghana where
     completed == 1 and disabled != True.
     returns None if API request (query_api()) fails"""
@@ -110,7 +106,7 @@ def get_data(tableName:str) -> pd.DataFrame | None:
     return df
 
 
-def add_since_earliest(df):
+def add_since_earliest(df: pd.DataFrame) -> pd.DataFrame:
     """adds a column to the inputted DataFrame that contains the earliest
     date"""
     return df.assign(
@@ -118,37 +114,32 @@ def add_since_earliest(df):
     )
 
 
-def tweak_initial(df):
+def tweak_initial(df: pd.DataFrame) -> pd.DataFrame:
     """data wrangling function for initial survey DataFrame. Strips whitespace on free input
     questions"""
     # name and phone are the only true free response questions
-    return (
-        df
-        .assign(
-            HeadHouseholdName=lambda df_: df_.HeadHouseholdName.str.strip(),  
-            HeadHouseholdPhoneNumber = lambda df_: df_.HeadHouseholdPhoneNumber.str.strip(),
-            nameBwe=lambda df_: df_.nameBwe.str.strip(),
-        )
+    return df.assign(
+        HeadHouseholdName=lambda df_: df_.HeadHouseholdName.str.strip(),
+        HeadHouseholdPhoneNumber=lambda df_: df_.HeadHouseholdPhoneNumber.str.strip(),
+        nameBwe=lambda df_: df_.nameBwe.str.strip(),
     )
 
 
-def tweak_followup(df):
+def tweak_followup(df: pd.DataFrame) -> pd.DataFrame:
     """data wrangling function for followup survey DataFrame. Strips whitespace on free input 
     questions"""
-    return (
-        df.assign(
-            HeadHouseholdName=lambda df_: df_.HeadHouseholdName.str.strip(),
-            nameBwe=lambda df_: df_.nameBwe.str.strip()
-        )
+    return df.assign(
+        HeadHouseholdName=lambda df_: df_.HeadHouseholdName.str.strip(),
+        nameBwe=lambda df_: df_.nameBwe.str.strip(),
     )
 
 
-def get_community(df, communities):
+def get_community(df: pd.DataFrame, communities: List[str]) -> pd.DataFrame:
     """query the DataFrame to only return the records with the selected communities"""
     return df.query("Community.isin(@communities).values")
 
 
-def weekday_graph(data):
+def weekday_graph(data: pd.DataFrame) -> None:
     """produce a bar graph of number of surveys conducted on each day of the week"""
     mapdict = {
         "0": "Mon",
@@ -169,11 +160,11 @@ def weekday_graph(data):
     newlabels = [mapdict[tck.get_text()] for tck in ax.get_xticklabels()]
     ax.set_xticklabels(newlabels)
     ax.grid(axis="y")
-    add_labels(ax,pct=False)
+    add_labels(ax, pct=False)
     st.pyplot(fig)
 
 
-def date_graph(data_i, data_f):
+def date_graph(data_i: pd.DataFrame, data_f: pd.DataFrame) -> None:
     """produce a graph showing the number of surveys conducted on each day of the year"""
     data_i = data_i.assign(date=pd.to_datetime(data_i.date))
     data_f = data_f.assign(date=pd.to_datetime(data_f.date))
@@ -188,19 +179,24 @@ def date_graph(data_i, data_f):
     ax.legend()
     st.pyplot(fig)
 
-    
-def add_labels(ax,pct=True):
+
+def add_labels(ax: plt.Axes, pct: bool = True) -> None:
     """add value labels to all bars in a given axis. For absolute counts, set pct=False"""
     for p in ax.patches:
         if not pd.isna(p.get_height()):
             if pct:
-                s = f"{p.get_height():.1f}" + '%'
+                s = f"{p.get_height():.1f}" + "%"
             else:
                 s = f"{p.get_height():.0f}"
-            ax.annotate(s, (p.get_x() + p.get_width() / 2, p.get_height()), ha='center', va='bottom')
+            ax.annotate(
+                s,
+                (p.get_x() + p.get_width() / 2, p.get_height()),
+                ha="center",
+                va="bottom",
+            )
 
 
-def header_info():
+def header_info() -> None:
     """display header information that will be on nearly every page of streamlit app"""
     image = Image.open("Bright-Water-Foundation-Logo-1.jpg")
 
@@ -210,7 +206,7 @@ def header_info():
     )
 
 
-def selection_sidebar(df_initial):
+def selection_sidebar(df_initial: pd.DataFrame) -> typing.List[str]:
     """interactive multiselect on the sidebar. Whatever selection the user makes on
     one page will be carried over to the other pages"""
     commuity_selection_options = [
@@ -250,12 +246,12 @@ def selection_sidebar(df_initial):
     return communities
 
 
-def main():
+def main() -> None:
     """main function"""
     header_info()
 
-    df_initial = get_data(tableName='InitialSurvey')
-    df_followup = get_data(tableName='FollowUpSurvey')
+    df_initial = get_data(tableName="InitialSurvey")
+    df_followup = get_data(tableName="FollowUpSurvey")
     if (type(df_initial) != pd.DataFrame) or (type(df_followup) != pd.DataFrame):
         st.error("API failed to return data")
         # return
