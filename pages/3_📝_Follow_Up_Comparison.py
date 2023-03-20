@@ -1,12 +1,6 @@
 import streamlit as st
 from PIL import Image
-from Home import (
-    get_data,
-    get_community,
-    header_info,
-    selection_sidebar,
-    add_labels
-)
+from Home import get_data, get_community, header_info, selection_sidebar, add_labels
 from pandas.api.types import CategoricalDtype
 import matplotlib.pyplot as plt
 import pandas as pd
@@ -15,8 +9,8 @@ import pandas as pd
 ##----------------------------
 header_info()
 
-df_initial = get_data(tableName='InitialSurvey')
-df_followup = get_data(tableName='FollowUpSurvey')
+df_initial = get_data(tableName="InitialSurvey")
+df_followup = get_data(tableName="FollowUpSurvey")
 if (type(df_initial) != pd.DataFrame) or (type(df_followup) != pd.DataFrame):
     st.error("API failed to return data")
 else:
@@ -47,8 +41,8 @@ else:
         )
         ax2.grid(axis="y")
         ax2.set_xlabel("Medical Costs Previous 4 Weeks (Local Currency)")
-        add_labels(ax1,pct=False)
-        add_labels(ax2,pct=False)
+        add_labels(ax1, pct=False)
+        add_labels(ax2, pct=False)
 
         col1, col2 = st.columns(2)
         col1.pyplot(fig1)

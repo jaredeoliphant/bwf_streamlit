@@ -1,12 +1,6 @@
 import streamlit as st
 from PIL import Image
-from Home import (
-    get_data,
-    get_community,
-    header_info,
-    selection_sidebar,
-    add_labels
-)
+from Home import get_data, get_community, header_info, selection_sidebar, add_labels
 from pandas.api.types import CategoricalDtype
 import matplotlib.pyplot as plt
 import pandas as pd
@@ -15,14 +9,14 @@ import pandas as pd
 ##----------------------------
 header_info()
 
-df_initial = get_data(tableName='InitialSurvey')
+df_initial = get_data(tableName="InitialSurvey")
 if type(df_initial) != pd.DataFrame:
     st.error("API failed to return data")
 else:
     communities = selection_sidebar(df_initial)
 
     if communities:
-        communitywater_df = get_data(tableName='CommunityWaterTest')
+        communitywater_df = get_data(tableName="CommunityWaterTest")
         communitywater = get_community(communitywater_df, communities)
         st.write("##")
         st.write("---")

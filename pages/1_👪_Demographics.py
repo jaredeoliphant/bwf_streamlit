@@ -247,7 +247,7 @@ def demographics(initial):
 ##----------------------------
 header_info()
 
-df_initial = get_data(tableName='InitialSurvey')
+df_initial = get_data(tableName="InitialSurvey")
 if type(df_initial) != pd.DataFrame:
     st.error("API failed to return data")
 else:
