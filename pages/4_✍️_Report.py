@@ -1,18 +1,21 @@
 import streamlit as st
 from PIL import Image
 
-image = Image.open('Bright-Water-Foundation-Logo-1.jpg')
+## start of main script
+##----------------------------
+image = Image.open("Bright-Water-Foundation-Logo-1.jpg")
 
 st.image(image)
 
-st.title('BRIGHT WATER FOUNDATION (BWF) \nATIWA WEST DISTRICT, EASTERN REGION, GHANA')
-st.write('LDS Charities Sankubenase Village Safe Water Project #WE21GHA0005')
+st.title("BRIGHT WATER FOUNDATION (BWF) \nATIWA WEST DISTRICT, EASTERN REGION, GHANA")
+st.write("LDS Charities Sankubenase Village Safe Water Project #WE21GHA0005")
 
-st.write('Final (Year-End) Report')
-st.write('October 2021 – September 2022')
+st.write("Final (Year-End) Report")
+st.write("October 2021 – September 2022")
 
-st.header('EXECUTIVE SUMMARY')
-st.write('''
+st.header("EXECUTIVE SUMMARY")
+st.write(
+    """
 Latter Day Saint Charities (The Church of Jesus Christ of Latter-day Saints) provided a \$6,925 grant to
 Bright Water Foundation (BWF) in early 2021 to provide safe water education in the Sankubenase
 Village Safe Water Project (Project). The Project is a water quality initiative aimed at strengthening
@@ -20,7 +23,7 @@ family self-reliance by teaching village households how to independently treat h
 supplies and ensuring safe water storage. The Project includes the villages of Sankubenase, Nkurakan,
 Amonom, Mampong and Wekpeti in the Atiwa West District, Eastern Region, of Ghana.
 The Project was launched in Sept 2021 with BWF U.S. and Ghana Management Staff training local safe
-water educators (SWEs) and volunteers. Training included instruction on: 
+water educators (SWEs) and volunteers. Training included instruction on:
 1. How to test local community and household water sources
 2. How to teach safe water principles and practices including storage and treatment
 3. How to effectively interview and collect periodic household information using a cell phone application
@@ -38,21 +41,24 @@ The grant of \$6,925 helped offset the total Project costs to date of \$10,366. 
 water testing kits, drinking water stations at schools, chlorine disinfectant tablets for households, and
 costs for village education, student education, public service announcements and periodic surveys.
 Management and training materials costs were the responsibility of BWF.
-''')
+"""
+)
 
-st.write('''
+st.write(
+    """
 This report details the Project’s work as follows:\n
 I. Safe Drinking Water Initiative Overview\n
 II. Project Description\n
 III. Project Objectives\n
 IV. Project Results\n
 V. Project Budget
-''')
+"""
+)
 
 
-
-st.subheader('I. Safe Drinking Water Initiative Overview')
-st.write('''
+st.subheader("I. Safe Drinking Water Initiative Overview")
+st.write(
+    """
 The purpose of the BWF safe water education initiative is to strengthen family self-reliance by teaching
 households how to independently treat home water supplies and ensure safe water storage. BWF
 provides a unique community-led and self-directed “Teach-Test-Treat” village safe water education
@@ -80,32 +86,42 @@ Local Safe Water Educators (SWEs) and volunteer staff, as well as district healt
 directorates, are trained by BWF project teams in the rudiments of the Teach-Test-Treat practices. The
 local health directorate takes the lead in selecting public health leaders in the villages.
 Safe Water Educators (SWEs) are identified at the village level to provide coordination for:
-''')
+"""
+)
 
-st.write('''
+st.write(
+    """
 1. testing community water sources;
 2. testing sample household water supplies;
 3. village education;
 4. household water treatment;
 5. safe water storage; and
 6. ongoing public service messages aired daily by local communication centers.
-''')
-st.write('SWEs also engage village schools in the Teach-Test-Treat educational approach by:')
-st.write('''
+"""
+)
+st.write(
+    "SWEs also engage village schools in the Teach-Test-Treat educational approach by:"
+)
+st.write(
+    """
 1. teaching safe water principles to all students;
 2. providing school safe water drinking stations; and
 3. organizing student Health Clubs to further student understanding and to promote safe water
 practices in the school and community.
-''')
+"""
+)
 
-st.write('''
+st.write(
+    """
 A modest fee-for-service schedule has been established to compensate SWEs and volunteers for
 services rendered in the community and schools.
-''')
+"""
+)
 
-st.subheader('II. Project Description')
+st.subheader("II. Project Description")
 
-st.write('''
+st.write(
+    """
 The Project’s target population is a multi-village area including the Sankubenase, Nkurakan, Amonom,
 Mampong and Wekpeti villages in Atiwa West District, Eastern Region, with a total population of about
 5,800 residents. Two Latter-day Saint congregations are among the households in these communities. A
@@ -113,23 +129,29 @@ cohort of 159 households (approximate 20% sample) was selected, using 2020 Ghana
 and employing a systematic sampling technique. Periodic surveys and household water tests were
 used to evaluate the effectiveness of household compliance in applying safe water principles and
 practices throughout the year.
-''')
+"""
+)
 
-st.write('''
+st.write(
+    """
 **Community Survey Demographics.** To understand the make-up of the local communities, several
 demographic questions were asked during the initial survey, prior to the safe water education
 intervention. A summary of this information is shown in the two tables below:
-''')
+"""
+)
 
-st.write('''
+st.write(
+    """
 This is a rural population, set in a tropical
 rainforest area where small scale agriculture is
 dominant. Cocoa, cassava, maize, and plantain
 are among the most common crops. Typical of West Africa, about half the population is less than 15 years of age.
-''')
+"""
+)
 
 
-st.write('''
+st.write(
+    """
 Access to public education in the district has been limited to Primary and Jr. High School. In this
 population, 40% of household heads had only primary education. 30% of household heads had a Jr.
 High education, and 8% reported having earned a senior high school certificate. Only 3% of household
@@ -144,14 +166,18 @@ contaminated river water, however, making it dangerous to use for drinking/cooki
 population fetch water two or more times per day. 70% of villagers will spend up to 15 minutes
 fetching water, while 15% of villagers walk 30-45 minutes or more to access a local water source.
 Nearly 60% of water was reported collected by a person older than 15 years (42% female, 16% male).
-''')
+"""
+)
 
-st.subheader('III. Project Objectives')
-st.write('''
+st.subheader("III. Project Objectives")
+st.write(
+    """
 Four specific objectives were identified to establish the effectiveness of the Teach-Test-Treat
 community-based, self-directed educational initiative:
-''')
-st.write('''
+"""
+)
+st.write(
+    """
 1. Staff Training. Train at least 20 community staff and volunteers.
 2. Village Education. Reach and educate at least 4,350 (75%) of the 5,800 villagers in the target
 area.
@@ -159,40 +185,45 @@ area.
 treatment.
 4. Diarrheal Disease Reduction in Children. Reduce early childhood (&lt; 5 years) diarrheal episodes
 by at least 25%.
-''')
+"""
+)
 
-st.subheader('IV. Project Results')
-st.write('''
+st.subheader("IV. Project Results")
+st.write(
+    """
 This report provides documentation on the results of the first-year activity for the stated objectives.
-''')
+"""
+)
 
 
-
-st.write('The following summary of project results (outcomes) are as follows:')
+st.write("The following summary of project results (outcomes) are as follows:")
 
 
 ####### table
 
-markdowntable = '''
+markdowntable = """
 | Project Objective | Measureable Outcome | Results - 30 Sep. '22 |
 |---|---|---|
 | 1. Train all BWF program staff and local SWE/volunteers in all aspects of the safe water education principles/practices | Train at least 20 staff and volunteers | 35 staff/volunteers trained **(175% of Project Objective)** |
 | 2. Educate Sankubenase villagers in the Teach-Test-Treat safe water methodology | Reach and educate at least 4,350 (75%) of Sankubenase’s 5,800 villagers (including school aged children) | 4,214 household adults were taught 1,500 children in the 8 Primary and Jr. High Schools were taught. **(130% of Project Objective)** |
 | 3. Quality improvement in household water supplies | Achieve at least 50% compliance of families who treat their water with chlorine or heat | 80% of 159 surveyed families “Always” treat their water; an additional 19% “Sometimes treat their water. **(160% of Project Objective)** |
 | 4. Reduce diarrhea in children &lt; 5 years | Reduce early childhood (&lt;5 yrs) diarrhea by at least 25% | 47% reduction in diarrhea **(188% of Project Objective)** |
-'''
+"""
 
 st.markdown(markdowntable)
 
-st.caption('''
+st.caption(
+    """
 Ordinal regression was used to examine whether the likelihood of treating water
 increased over time (i.e., if time was a significant predictor of people’s responses,
 indicating that the program is working). Compared to the initial survey, people
 completing subsequent surveys were associated with a 8.67 (time 1) and 8.13 (time 2) increase in log odds, respectively. In other words, the likelihood of treating
 water increased immensely after people started the program.
-''')
+"""
+)
 
-st.markdown("""
+st.markdown(
+    """
 #### 1. Staff Training
 A competent cadre of 35 Safe Water Educators (SWEs) and village volunteers were
 identified for the target communities. An eight-day training was provided by a U.S. team in
@@ -202,8 +233,10 @@ their assigned work areas. Each SWE was assigned 100-125 households to contact a
 least one government district health and education representative from each directorate was
 appointed and thoroughly trained with the SWEs. These representatives have provided ongoing
 government coordination with the project. Attrition of staff was minimal.
-""")
-st.markdown("""
+"""
+)
+st.markdown(
+    """
 #### 2. Village Education
 A total of 1,144 village education meetings were reported during the 12-month
 period by the SWEs and village volunteers. Each meeting was verified by a household telephone
@@ -213,8 +246,10 @@ meetings. These numbers include adults who attended more than one meeting in ord
 all four education lessons. In most cases individual households were educated at their homes
 (compounds), although in some cases two or more households attended together. Virtually all
 students enrolled in the local village schools were also given safe water instruction.
-""")
-st.markdown("""
+"""
+)
+st.markdown(
+    """
 #### 3. Household Drinking Water Quality
 Two measures were used to discern changes in the quality of
 water in household water supplies.
@@ -223,8 +258,10 @@ Each sample household was queried about water use behaviors in the home,
 including water treatment, at the onset of the project, prior to the Bright Water Teach-Test-
 #Treat intervention. Subsequent surveys were conducted at the end of the 6th and 12th months
 of the project. The following results were reported:
-""")
-st.write("""
+"""
+)
+st.write(
+    """
 Note that the
 initial survey in September 2021 (Blue line), had 41% of respondents reporting that they did
 not know the last time their household water had been treated, with the remainder (57%)
@@ -259,13 +296,15 @@ most common organism causing diarrheal disease in humans. All on-the-ground proj
 management and SWEs were trained in the conducting of these tests. The Portable
 Microbiological Laboratory test results are shown below:
 
-""")
+"""
+)
 
 
-st.markdown('$\\tilde{\chi}^2$ Significance at p <.001')
-st.markdown('$\\tilde{\chi}^2$ Significance at p <.001')
+st.markdown("$\\tilde{\chi}^2$ Significance at p <.001")
+st.markdown("$\\tilde{\chi}^2$ Significance at p <.001")
 
-st.write("""
+st.write(
+    """
 As the reader can see from the tables above, marked improvements are seen in household
 water quality over the course of the year. Initial testing before intervention revealed almost all
 (99%) Colilert and Petrifilm results showed either moderate or high-risk for disease in
@@ -295,10 +334,12 @@ revealed moderate and high-risk results in
 86%, 64%, and 69 % of the community
 water sources throughout the year.
 
-""")
+"""
+)
 
 
-st.write("""
+st.write(
+    """
 < 5 YearsSchool-Age
 
 0.00%
@@ -363,10 +404,12 @@ These four outcome measures provide significant evidence that people are interes
 water. When basic safe water principles and practices are taught, villagers have taken action to protect
 their families from disease caused by contaminated water. Numbers of diarrheal cases declined and
 school/work loss was lessened significantly as household water quality improved.
-""")
+"""
+)
 
-st.subheader('V. Project Budget')
-st.write("""
+st.subheader("V. Project Budget")
+st.write(
+    """
 The table below describes the original project budget request from the Church and a comparison to
 the actual expenses incurred.
 Activity/Materials Project Actual Explanation of Variance
@@ -431,4 +474,5 @@ been refined because of this project. Future
 budget projections will be more accurate.
 *Require local labor to conduct and/or materials locally purchased. A large portion of the project costs go
 directly back into the local economy.
-""")
+"""
+)
