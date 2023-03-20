@@ -134,7 +134,7 @@ def tweak_followup(df: pd.DataFrame) -> pd.DataFrame:
     )
 
 
-def get_community(df: pd.DataFrame, communities: List[str]) -> pd.DataFrame:
+def get_community(df: pd.DataFrame, communities: typing.List[str]) -> pd.DataFrame:
     """query the DataFrame to only return the records with the selected communities"""
     return df.query("Community.isin(@communities).values")
 
