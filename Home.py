@@ -310,8 +310,8 @@ def main() -> None:
                 'HeadHouseholdName','Community',
                 'firstDateCommunity','sinceEarliest']
             
-        st.write(data_initial[cols])
-        st.write(data_initial[cols].dtypes)
+        # st.write(data_initial[cols])
+        # st.write(data_initial[cols].dtypes)
         fig,ax = plt.subplots()
         (data_initial
          .sinceEarliest
