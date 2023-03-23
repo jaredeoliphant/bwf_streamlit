@@ -110,7 +110,7 @@ def add_since_earliest(df: pd.DataFrame) -> pd.DataFrame:
     """adds a column to the inputted DataFrame that contains the earliest
     date"""
     return df.assign(
-        since_earliest=lambda df_: df_.date - df_.groupby(by="a").date.transform(min)
+        since_earliest=lambda df_: df_.date - df_.groupby(by="Community").date.transform(min)
     )
 
 
@@ -285,6 +285,81 @@ def main() -> None:
         else:
             st.write("---")
             st.write("#### There are no duplicate household names in this dataset")
+            
+        
+
+        
+        data_initial['date'] = pd.to_datetime(
+            data_initial['date']
+        )
+        
+        data_initial['firstDateCommunity'] = (data_initial
+            .groupby('Community')
+            .date
+            .transform(min)
+        )
+        data_initial['sinceEarliest'] = ((data_initial
+                                        .date - data_initial
+                                        .firstDateCommunity)
+                                       .dt
+                                       .days
+                                      )
+        
+        cols = ['SurveyId','date',
+                'createdAt','Namebwe',
+                'HeadHouseholdName','Community',
+                'firstDateCommunity','sinceEarliest']
+            
+        st.write(data_initial[cols])
+        st.write(data_initial[cols].dtypes)
+        fig,ax = plt.subplots()
+        (data_initial
+         .sinceEarliest
+         .plot
+         .hist(bins=30,ax=ax,
+               title=f'''  Initial Surveys
+               How many days since the first survey
+               was conducted in this community'''
+              )
+        )
+        st.pyplot(fig)
+        
+        
+        
+        
+        
+        
+        #=============================================
+        mindatekey = data_initial.groupby('Community').date.min().reset_index().rename(columns={'date':'firstDateCommunity'})
+        # st.write(mindatekey)
+        
+        data_followup['date'] = pd.to_datetime(
+            data_followup['date']
+        )
+        
+        data_followup = data_followup.merge(mindatekey,how='left')
+        # st.write(df_followup)
+        
+        data_followup['sinceEarliest'] = ((data_followup
+                                        .date - data_followup
+                                        .firstDateCommunity)
+                                       .dt
+                                       .days
+                                      )
+        
+        fig,ax = plt.subplots()
+        (data_followup
+         .sinceEarliest
+         .plot
+         .hist(bins=30,ax=ax,
+               title=f'''  Follow Up Surveys
+               How many days since the first survey
+               was conducted in this community
+               6 months = {365//2} days
+               9 months = {3*365//4} days'''
+              )
+        )
+        st.pyplot(fig)
 
 
 if __name__ == "__main__":
